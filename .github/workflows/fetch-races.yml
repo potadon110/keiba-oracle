@@ -1,0 +1,27 @@
+name: 毎日レースデータ自動取得
+
+on:
+  # 毎朝9時（日本時間）に自動実行 = UTC 0時
+  schedule:
+    - cron: '0 0 * * *'
+  # 手動実行ボタンも追加
+  workflow_dispatch:
+
+jobs:
+  fetch-races:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Node.jsをセットアップ
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: レースデータを取得してSupabaseに保存
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: node scripts/fetch-races.js
