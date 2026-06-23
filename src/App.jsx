@@ -14,8 +14,27 @@ const LOCAL_VENUES = [
   "盛岡","水沢","名古屋","園田","姫路","笠松","金沢","高知","佐賀",
 ];
 
-const SAMPLE_CENTRAL = [];
-const SAMPLE_LOCAL   = [];
+const SAMPLE_CENTRAL = [
+  { id:1,  race_type:"central", venue:"東京",  race_number:11, name:"日本ダービー",    start_time:"15:40", grade:"G1", distance:"芝2400m", condition:"良"   },
+  { id:2,  race_type:"central", venue:"東京",  race_number:10, name:"メトロポリタンS", start_time:"15:05", grade:"OP", distance:"芝2400m", condition:"良"   },
+  { id:3,  race_type:"central", venue:"東京",  race_number:9,  name:"プリンシパルS",   start_time:"14:25", grade:"OP", distance:"芝2000m", condition:"良"   },
+  { id:4,  race_type:"central", venue:"阪神",  race_number:11, name:"鳴尾記念",        start_time:"15:30", grade:"G3", distance:"芝2000m", condition:"稍重" },
+  { id:5,  race_type:"central", venue:"阪神",  race_number:10, name:"白百合S",         start_time:"14:55", grade:"OP", distance:"芝2000m", condition:"稍重" },
+  { id:6,  race_type:"central", venue:"函館",  race_number:11, name:"函館スプリントS",  start_time:"15:35", grade:"G3", distance:"芝1200m", condition:"良"   },
+];
+
+const SAMPLE_LOCAL = [
+  { id:11, race_type:"local", venue:"大井",   race_number:11, name:"帝王賞",           start_time:"20:10", grade:"G1", distance:"ダ2000m", condition:"良"   },
+  { id:12, race_type:"local", venue:"大井",   race_number:10, name:"東京スプリント",    start_time:"19:30", grade:"G3", distance:"ダ1200m", condition:"良"   },
+  { id:13, race_type:"local", venue:"川崎",   race_number:11, name:"川崎記念",          start_time:"20:15", grade:"G1", distance:"ダ2100m", condition:"良"   },
+  { id:14, race_type:"local", venue:"船橋",   race_number:10, name:"かしわ記念",        start_time:"19:45", grade:"G1", distance:"ダ1600m", condition:"稍重" },
+  { id:15, race_type:"local", venue:"浦和",   race_number:9,  name:"浦和記念",          start_time:"18:30", grade:"G2", distance:"ダ2000m", condition:"良"   },
+  { id:16, race_type:"local", venue:"門別",   race_number:11, name:"北海道スプリントC",  start_time:"20:00", grade:"G3", distance:"ダ1200m", condition:"良"   },
+  { id:17, race_type:"local", venue:"名古屋", race_number:11, name:"名古屋グランプリ",  start_time:"16:30", grade:"G2", distance:"ダ2500m", condition:"良"   },
+  { id:18, race_type:"local", venue:"園田",   race_number:10, name:"兵庫チャンピオンS", start_time:"17:00", grade:"G2", distance:"ダ1870m", condition:"良"   },
+  { id:19, race_type:"local", venue:"高知",   race_number:11, name:"黒船賞",            start_time:"16:45", grade:"G3", distance:"ダ1400m", condition:"良"   },
+  { id:20, race_type:"local", venue:"佐賀",   race_number:9,  name:"佐賀記念",          start_time:"15:55", grade:"G3", distance:"ダ2000m", condition:"良"   },
+];
 
 // 各レースIDに対応するサンプル出走馬
 const SAMPLE_HORSES = {
@@ -366,6 +385,76 @@ function HomeScreen({ onNavigate, featured, liveData, fetchStatus, lastUpdated, 
         <ChevronRight size={18}/>
       </button>
 
+      {/* 穴馬ランキングボタン */}
+      <button style={{ ...S.ctaButton, marginTop:8,
+        background:"linear-gradient(135deg,#1a0a00,#2a1400)",
+        border:"1px solid #FF6600", color:"#FF8C00",
+        boxShadow:"0 0 20px rgba(255,102,0,0.15)" }}
+        onClick={() => onNavigate("anaba")}>
+        <span>🔥 穴馬ランキング</span>
+        <ChevronRight size={18}/>
+      </button>
+
+      {/* 的中率・回収率ボタン */}
+      <button style={{ ...S.ctaButton, marginTop:8,
+        background:"linear-gradient(135deg,#0a1a0a,#0f2a0f)",
+        border:"1px solid #7aaa7a", color:"#7aaa7a",
+        boxShadow:"0 0 20px rgba(122,170,122,0.15)" }}
+        onClick={() => onNavigate("stats")}>
+        <span>📊 的中率・回収率</span>
+        <ChevronRight size={18}/>
+      </button>
+
+      {/* お気に入りボタン */}
+      <button style={{ ...S.ctaButton, marginTop:8,
+        background:"linear-gradient(135deg,#1a1400,#2a1a00)",
+        border:"1px solid #FFD700", color:"#FFD700",
+        boxShadow:"0 0 20px rgba(255,215,0,0.12)" }}
+        onClick={() => onNavigate("favorites")}>
+        <span>♥ お気に入り</span>
+        <ChevronRight size={18}/>
+      </button>
+
+      {/* パドック診断ボタン */}
+      <button style={{ ...S.ctaButton, marginTop:8,
+        background:"linear-gradient(135deg,#0a0a1a,#141428)",
+        border:"1px solid #8888FF", color:"#8888FF",
+        boxShadow:"0 0 20px rgba(136,136,255,0.15)" }}
+        onClick={() => onNavigate("paddock")}>
+        <span>📷 パドック診断</span>
+        <ChevronRight size={18}/>
+      </button>
+
+      {/* プレミアムボタン */}
+      <button style={{ ...S.ctaButton, marginTop:8,
+        background:"linear-gradient(135deg,#1a0e00,#2e1a00)",
+        border:"1px solid #FFD700",
+        color:"#FFD700",
+        boxShadow:"0 0 24px rgba(255,215,0,0.2)" }}
+        onClick={() => onNavigate("subscription")}>
+        <span>👑 プレミアムプラン</span>
+        <ChevronRight size={18}/>
+      </button>
+
+      {/* 通知設定ボタン */}
+      <button style={{ ...S.ctaButton, marginTop:8,
+        background:"linear-gradient(135deg,#0e0a1a,#1a1430)",
+        border:"1px solid #AA88FF", color:"#AA88FF",
+        boxShadow:"0 0 20px rgba(170,136,255,0.15)" }}
+        onClick={() => onNavigate("notifications")}>
+        <span>🔔 通知設定</span>
+        <ChevronRight size={18}/>
+      </button>
+
+      {/* 収益ダッシュボードボタン */}
+      <button style={{ ...S.ctaButton, marginTop:8,
+        background:"linear-gradient(135deg,#0a1a0a,#0f2810)",
+        border:"1px solid #7aaa7a", color:"#7aaa7a",
+        boxShadow:"0 0 20px rgba(122,170,122,0.15)" }}
+        onClick={() => onNavigate("affiliate")}>
+        <span>💰 収益ダッシュボード</span>
+        <ChevronRight size={18}/>
+      </button>
       <div style={{ textAlign:"center", fontSize:11, color:"#333", marginTop:16, letterSpacing:1 }}>
         {isLoading ? "JRA情報を取得中…" : isFallback ? "サンプルデータ表示中" : "AI 予想更新済み"}
       </div>
@@ -427,12 +516,8 @@ function RaceListScreen({ onNavigate }) {
   const isLocal   = mainTab === "local";
   const accent    = isLocal ? "#40c8c8" : "#FFD700";
   const base      = mainTab === "central" ? (centralRaces ?? []) : (localRaces ?? []);
-
-  // 中央競馬の開催場リスト（データから動的に生成）
-  const centralVenues = Array.from(new Set((centralRaces ?? []).map(r => r.venue))).filter(Boolean);
-
   const graded    = gradeFilter === "ALL" ? base : base.filter(r => r.grade === gradeFilter);
-  const displayed = venueFilter !== "ALL" ? graded.filter(r => r.venue === venueFilter) : graded;
+  const displayed = (isLocal && venueFilter !== "ALL") ? graded.filter(r => r.venue === venueFilter) : graded;
   const isLoading = mainTab === "central" ? loadingC : loadingL;
   const grades    = ["ALL", ...Array.from(new Set(base.map(r => r.grade))).filter(Boolean)];
 
@@ -481,40 +566,22 @@ function RaceListScreen({ onNavigate }) {
         })}
       </div>
 
-      {/* ── 競馬場フィルター（中央・地方共通） ── */}
-      {(() => {
-        const venues = isLocal ? LOCAL_VENUES : centralVenues;
-        if (venues.length === 0) return null;
-        const activeColor  = isLocal ? "#40c8c8" : "#FFD700";
-        const activeBg     = isLocal ? "#001a1a"  : "#1a1400";
-        const activeBorder = isLocal ? "#2a6060"  : "#3a3318";
-        const inactiveColor  = isLocal ? "#446666" : "#666644";
-        const inactiveBg     = isLocal ? "#080f0f" : "#0f0e08";
-        const inactiveBorder = isLocal ? "#1a2828" : "#282810";
-        return (
-          <div style={{ display:"flex", gap:6, padding:"10px 16px 0",
-            overflowX:"auto", WebkitOverflowScrolling:"touch" }}>
-            <button onClick={() => setVenueFilter("ALL")} style={{
-              flexShrink:0, padding:"5px 13px", borderRadius:8, cursor:"pointer",
-              border: venueFilter==="ALL" ? `1px solid ${activeBorder}` : `1px solid ${inactiveBorder}`,
-              background: venueFilter==="ALL" ? activeBg : inactiveBg,
-              color: venueFilter==="ALL" ? activeColor : inactiveColor,
+      {/* ── 地方: 競馬場フィルター ── */}
+      {isLocal && (
+        <div style={{ display:"flex", gap:6, padding:"10px 16px 0",
+          overflowX:"auto", WebkitOverflowScrolling:"touch" }}>
+          {["ALL", ...LOCAL_VENUES].map(v => (
+            <button key={v} onClick={() => setVenueFilter(v)} style={{
+              flexShrink:0, padding:"5px 11px", borderRadius:8, cursor:"pointer",
+              border: venueFilter===v ? "1px solid #40c8c8" : "1px solid #1a2828",
+              background: venueFilter===v ? "#001a1a" : "#080f0f",
+              color: venueFilter===v ? "#40c8c8" : "#446666",
               fontSize:11, fontWeight:700, whiteSpace:"nowrap",
               fontFamily:"'Noto Serif JP',serif",
-            }}>全場</button>
-            {venues.map(v => (
-              <button key={v} onClick={() => setVenueFilter(v)} style={{
-                flexShrink:0, padding:"5px 13px", borderRadius:8, cursor:"pointer",
-                border: venueFilter===v ? `1px solid ${activeBorder}` : `1px solid ${inactiveBorder}`,
-                background: venueFilter===v ? activeBg : inactiveBg,
-                color: venueFilter===v ? activeColor : inactiveColor,
-                fontSize:11, fontWeight:700, whiteSpace:"nowrap",
-                fontFamily:"'Noto Serif JP',serif",
-              }}>{v}</button>
-            ))}
-          </div>
-        );
-      })()}
+            }}>{v === "ALL" ? "全場" : v}</button>
+          ))}
+        </div>
+      )}
 
       {/* ── グレードフィルター ── */}
       <div style={{ display:"flex", gap:8, padding:"10px 16px", overflowX:"auto" }}>
@@ -547,7 +614,7 @@ function RaceListScreen({ onNavigate }) {
           ))
         ) : displayed.length === 0 ? (
           <div style={{ textAlign:"center", padding:"40px 20px", color:"#444", fontSize:13 }}>
-            {venueFilter !== "ALL" ? `${venueFilter}のレースはありません` : "該当するレースがありません"}
+            {isLocal && venueFilter !== "ALL" ? `${venueFilter}のレースはありません` : "該当するレースがありません"}
           </div>
         ) : (
           displayed.map((race, i) => (
@@ -3888,184 +3955,6 @@ function AffiliateScreen({ onNavigate }) {
   );
 }
 
-// ============================================================
-// ボトムナビゲーション
-// ============================================================
-function BottomNav({ screen, navigate, currentUser }) {
-  // 詳細画面など一部の画面では非表示
-  const hideOn = ["detail", "auth", "paddock"];
-  if (hideOn.includes(screen)) return null;
-
-  const tabs = [
-    {
-      key: "home",
-      label: "ホーム",
-      icon: (active) => (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={active ? "#FFD700" : "#555"} strokeWidth="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9,22 9,12 15,12 15,22"/>
-        </svg>
-      ),
-    },
-    {
-      key: "list",
-      label: "レース",
-      icon: (active) => (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={active ? "#FFD700" : "#555"} strokeWidth="2">
-          <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
-        </svg>
-      ),
-    },
-    {
-      key: "anaba",
-      label: "穴馬",
-      icon: (active) => (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={active ? "#FF8C00" : "#555"} strokeWidth="2">
-          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-        </svg>
-      ),
-      accent: "#FF8C00",
-    },
-    {
-      key: "stats",
-      label: "成績",
-      icon: (active) => (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={active ? "#7aaa7a" : "#555"} strokeWidth="2">
-          <line x1="18" y1="20" x2="18" y2="10"/>
-          <line x1="12" y1="20" x2="12" y2="4"/>
-          <line x1="6"  y1="20" x2="6"  y2="14"/>
-        </svg>
-      ),
-      accent: "#7aaa7a",
-    },
-    {
-      key: "mypage",
-      label: "マイページ",
-      icon: (active) => (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={active ? "#FFD700" : "#555"} strokeWidth="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-      ),
-    },
-  ];
-
-  // マイページタブ用のメニュー
-  const [showMenu, setShowMenu] = useState(false);
-
-  const handleTab = (key) => {
-    if (key === "mypage") {
-      setShowMenu(!showMenu);
-      return;
-    }
-    setShowMenu(false);
-    navigate(key);
-  };
-
-  const isActive = (key) => {
-    if (key === "mypage") return ["favorites","notifications","subscription","affiliate","auth"].includes(screen);
-    return screen === key;
-  };
-
-  return (
-    <>
-      {/* マイページ展開メニュー */}
-      {showMenu && (
-        <div style={{
-          position:"absolute", bottom:64, left:0, right:0,
-          background:"#050504", borderTop:"1px solid #FFD70022",
-          zIndex:150, padding:"8px 0",
-          animation:"fadeSlideUp 0.2s ease both",
-          boxShadow:"0 -4px 24px rgba(0,0,0,0.9)",
-        }}>
-          {[
-            { key:"favorites",     label:"♥ お気に入り"       },
-            { key:"stats",         label:"📊 的中率・回収率"  },
-            { key:"notifications", label:"🔔 通知設定"        },
-            { key:"subscription",  label:"👑 プレミアムプラン" },
-            { key:"affiliate",     label:"💰 収益ダッシュボード" },
-            { key: currentUser ? "logout" : "auth",
-              label: currentUser ? `👤 ${currentUser.nickname}（ログアウト）` : "🔑 ログイン / 登録" },
-          ].map(item => (
-            <button key={item.key} onClick={() => {
-              setShowMenu(false);
-              if (item.key === "logout") {
-                // ログアウト処理はnavigateで対応
-                navigate("auth");
-              } else {
-                navigate(item.key);
-              }
-            }} style={{
-              display:"block", width:"100%", padding:"13px 20px",
-              background:"none", border:"none", borderBottom:"1px solid #111009",
-              color:"#C8B98A", fontSize:14, fontWeight:700, textAlign:"left",
-              cursor:"pointer", fontFamily:"'Noto Serif JP',serif",
-            }}>
-              {item.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* タブバー */}
-      <div style={{
-        position:"absolute", bottom:0, left:0, right:0, height:64,
-        background:"#050504",
-        borderTop:"1px solid #FFD70022",
-        display:"flex", alignItems:"center",
-        zIndex:100,
-        boxShadow:"0 -4px 24px rgba(0,0,0,0.9)",
-      }}>
-        {tabs.map(tab => {
-          const active = isActive(tab.key);
-          const accent = tab.accent || "#FFD700";
-          return (
-            <button key={tab.key} onClick={() => handleTab(tab.key)} style={{
-              flex:1, display:"flex", flexDirection:"column",
-              alignItems:"center", justifyContent:"center", gap:3,
-              height:"100%", border:"none", background:"none",
-              cursor:"pointer", position:"relative",
-              transition:"all 0.2s",
-            }}>
-              {/* アクティブインジケーター */}
-              {active && (
-                <div style={{
-                  position:"absolute", top:0, left:"25%", right:"25%",
-                  height:2, borderRadius:"0 0 2px 2px",
-                  background: accent,
-                  boxShadow:`0 0 8px ${accent}`,
-                }}/>
-              )}
-              {tab.icon(active)}
-              <span style={{
-                fontSize:10, fontWeight:700,
-                color: active ? accent : "#444",
-                fontFamily:"'Noto Serif JP',serif",
-                letterSpacing:0.3,
-              }}>
-                {tab.label}
-              </span>
-              {/* マイページはユーザーアバター */}
-              {tab.key === "mypage" && currentUser && (
-                <div style={{
-                  position:"absolute", top:8, right:"20%",
-                  width:8, height:8, borderRadius:"50%",
-                  background:"#FFD700",
-                }}/>
-              )}
-            </button>
-          );
-        })}
-      </div>
-    </>
-  );
-}
-
 export default function App() {
   const [screen,       setScreen]       = useState("home");
   const [selectedRace, setSelectedRace] = useState(null);
@@ -4158,62 +4047,56 @@ export default function App() {
       `}</style>
 
       <div style={S.phone}>
-        {/* ── コンテンツエリア ── */}
-        <div style={{ paddingBottom: 64 }}>
-          {screen === "home" && (
-            <HomeScreen
-              onNavigate={navigate}
-              featured={featured}
-              liveData={liveData}
-              fetchStatus={fetchStatus}
-              lastUpdated={lastUpdated}
-              onRefresh={fetchJRAInfo}
-              currentUser={currentUser}
-              onLogout={handleLogout}
-            />
-          )}
-          {screen === "list" && (
-            <RaceListScreen onNavigate={navigate}/>
-          )}
-          {screen === "detail" && selectedRace && (
-            <RaceDetailScreen race={selectedRace} onNavigate={navigate}/>
-          )}
-          {screen === "anaba" && (
-            <AnabaRankingScreen onNavigate={navigate}/>
-          )}
-          {screen === "stats" && (
-            <StatsScreen onNavigate={navigate}/>
-          )}
-          {screen === "favorites" && (
-            <FavoritesScreen onNavigate={navigate}/>
-          )}
-          {screen === "auth" && (
-            <AuthScreen onNavigate={navigate} onLogin={handleLogin}/>
-          )}
-          {screen === "paddock" && (
-            <PaddockScreen onNavigate={navigate}/>
-          )}
-          {screen === "subscription" && (
-            <SubscriptionScreen
-              onNavigate={navigate}
-              currentUser={currentUser}
-              onUpgrade={(plan) => {
-                const updated = { ...currentUser, plan };
-                setCurrentUser(updated);
-                saveUser(updated);
-              }}
-            />
-          )}
-          {screen === "notifications" && (
-            <NotificationScreen onNavigate={navigate}/>
-          )}
-          {screen === "affiliate" && (
-            <AffiliateScreen onNavigate={navigate}/>
-          )}
-        </div>
-
-        {/* ── ボトムナビゲーション ── */}
-        <BottomNav screen={screen} navigate={navigate} currentUser={currentUser}/>
+        {screen === "home" && (
+          <HomeScreen
+            onNavigate={navigate}
+            featured={featured}
+            liveData={liveData}
+            fetchStatus={fetchStatus}
+            lastUpdated={lastUpdated}
+            onRefresh={fetchJRAInfo}
+            currentUser={currentUser}
+            onLogout={handleLogout}
+          />
+        )}
+        {screen === "list" && (
+          <RaceListScreen onNavigate={navigate}/>
+        )}
+        {screen === "detail" && selectedRace && (
+          <RaceDetailScreen race={selectedRace} onNavigate={navigate}/>
+        )}
+        {screen === "anaba" && (
+          <AnabaRankingScreen onNavigate={navigate}/>
+        )}
+        {screen === "stats" && (
+          <StatsScreen onNavigate={navigate}/>
+        )}
+        {screen === "favorites" && (
+          <FavoritesScreen onNavigate={navigate}/>
+        )}
+        {screen === "auth" && (
+          <AuthScreen onNavigate={navigate} onLogin={handleLogin}/>
+        )}
+        {screen === "paddock" && (
+          <PaddockScreen onNavigate={navigate}/>
+        )}
+        {screen === "subscription" && (
+          <SubscriptionScreen
+            onNavigate={navigate}
+            currentUser={currentUser}
+            onUpgrade={(plan) => {
+              const updated = { ...currentUser, plan };
+              setCurrentUser(updated);
+              saveUser(updated);
+            }}
+          />
+        )}
+        {screen === "notifications" && (
+          <NotificationScreen onNavigate={navigate}/>
+        )}
+        {screen === "affiliate" && (
+          <AffiliateScreen onNavigate={navigate}/>
+        )}
       </div>
     </div>
   );
