@@ -93,8 +93,10 @@ async function fetchRacesFromSupabase(raceType) {
   if (SUPABASE_URL.includes("your-project")) return null;
   try {
     const today = new Date().toISOString().slice(0, 10);
+    // 今日から7日以内のレースを取得
+    const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/races?race_type=eq.${raceType}&race_date=eq.${today}&order=start_time.asc`,
+      `${SUPABASE_URL}/rest/v1/races?race_type=eq.${raceType}&race_date=gte.${today}&race_date=lte.${nextWeek}&order=race_date.asc,start_time.asc`,
       {
         headers: {
           apikey: SUPABASE_ANON,
@@ -591,6 +593,12 @@ function RaceListScreen({ onNavigate }) {
                       borderRadius:5, padding:"2px 6px",
                       fontFamily:"'Rajdhani',sans-serif" }}>
                       {race.race_number}R
+                    </span>
+                  )}
+                  {race.race_date && (
+                    <span style={{ fontSize:10, color:"#555",
+                      fontFamily:"'Rajdhani',sans-serif" }}>
+                      {race.race_date.slice(5).replace("-","/")}
                     </span>
                   )}
                 </div>
@@ -3977,9 +3985,9 @@ function BottomNav({ screen, navigate, currentUser }) {
       {/* マイページ展開メニュー */}
       {showMenu && (
         <div style={{
-          position:"absolute", bottom:64, left:0, right:0,
+          left:0, right:0,
           background:"#050504", borderTop:"1px solid #FFD70022",
-          zIndex:150, padding:"8px 0",
+          padding:"8px 0",
           animation:"fadeSlideUp 0.2s ease both",
           boxShadow:"0 -4px 24px rgba(0,0,0,0.9)",
         }}>
@@ -3988,7 +3996,6 @@ function BottomNav({ screen, navigate, currentUser }) {
             { key:"stats",         label:"📊 的中率・回収率"  },
             { key:"notifications", label:"🔔 通知設定"        },
             { key:"subscription",  label:"👑 プレミアムプラン" },
-            { key:"affiliate",     label:"💰 収益ダッシュボード" },
             { key: currentUser ? "logout" : "auth",
               label: currentUser ? `👤 ${currentUser.nickname}（ログアウト）` : "🔑 ログイン / 登録" },
           ].map(item => (
@@ -4014,11 +4021,10 @@ function BottomNav({ screen, navigate, currentUser }) {
 
       {/* タブバー */}
       <div style={{
-        position:"absolute", bottom:0, left:0, right:0, height:64,
+        left:0, right:0, height:64,
         background:"#050504",
         borderTop:"1px solid #FFD70022",
         display:"flex", alignItems:"center",
-        zIndex:100,
         boxShadow:"0 -4px 24px rgba(0,0,0,0.9)",
       }}>
         {tabs.map(tab => {
@@ -4159,7 +4165,7 @@ export default function App() {
 
       <div style={S.phone}>
         {/* ── コンテンツエリア ── */}
-        <div style={{ paddingBottom: 64 }}>
+        <div>
           {screen === "home" && (
             <HomeScreen
               onNavigate={navigate}
